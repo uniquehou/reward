@@ -2,243 +2,301 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>抽奖</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-	<style>
-		body {
-			background: #f0f1f2;
-		}
-		h1 {
-			text-align: center;
-			margin: 20px 0;
-            display: none;
-		}
-		#canvas {
-			margin: 0;
-			padding: 0;
-			border: 1px solid #ccc;
-			background-image: url("{% static 'images/draw1.jpg' %}");
-			background-size: 100% 100%;
-            width: 100%;
-		}
-		#finish {
-			position: fixed;
-			background: rgba(0,0,0,0);
-			width: 32%;
-			height: 8%;
-			top: 71%;
-			left: 34%;
-		}
+    <meta charset="UTF-8">
+    <title>抽奖</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style>
+        body {
+            background: #f0f1f2;
+        }
 
-		#award {
-			font-weight: bold;
-			margin-left: 5px;
-		}
-		#code {
-			font-weight: bold;
-			margin-left: 5px;
-		}
-	</style>
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            display: none;
+        }
+
+        #canvas {
+            margin: 0;
+            padding: 0;
+            border: 1px solid #ccc;
+            background-image: url("{% static 'images/draw1.jpg' %}");
+            background-size: 100% 100%;
+            width: 100%;
+        }
+
+        #finish {
+            position: fixed;
+            background: rgba(0, 0, 0, 0);
+            width: 32%;
+            height: 8%;
+            top: 71%;
+            left: 34%;
+        }
+
+        #award {
+            font-weight: bold;
+            margin-left: 5px;
+        }
+
+        #code {
+            font-weight: bold;
+            margin-left: 5px;
+        }
+    </style>
 </head>
 <body>
-    <div class="modal fade" id="rule" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">说明</h4>
-                </div>
-                <div class="modal-body">
-                    <p class="text-center">画符召唤奖品</p>
-                    <p class="text-center">PS：心诚则灵</p>
-                    <img src="{% static 'images/fu.png' %}" class="img-responsive center-block">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="to_info" class="btn btn-primary btn-lg btn-block ladda-button" data-dismiss="modal" data-style="zoom-out" data-size="l"><span class='ladda-label'>开始抽奖</span> </button>
-                </div>
+<div class="modal fade" id="rule" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">说明</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">画符召唤奖品</p>
+                <p class="text-center">PS：心诚则灵</p>
+                <img src="{% static 'images/fu.png' %}" class="img-responsive center-block">
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="to_info" class="btn btn-primary btn-lg btn-block ladda-button"
+                        data-dismiss="modal" data-style="zoom-out" data-size="l"><span class='ladda-label'>开始抽奖</span>
+                </button>
             </div>
         </div>
     </div>
+</div>
 
-	<div class="modal fade" id="result" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">结果</h4>
-                </div>
-                <div class="modal-body">
-                    <p class="text-center">恭喜你，抽中<span id="award">旅游奖</span></p>
-                    <p class="text-center">兑奖码<span id="code">WTlkdaD</span></p>
-                    <p class="text-center">关注公众号回复兑奖码即可获得奖品，快去关注吧</p>
-                    <img src="{% static 'images/wechat.jpg' %}" class="img-responsive center-block">
-                </div>
-              <!--   <div class="modal-footer">
-                    <button type="button" id="to_info" class="btn btn-primary btn-lg btn-block ladda-button" data-dismiss="modal" data-style="zoom-out" data-size="l"><span class='ladda-label'>完善信息</span> </button>
-                </div> -->
+<div class="modal fade" id="result" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">结果</h4>
             </div>
+            <div class="modal-body">
+                <p class="text-center">恭喜你，抽中<span id="award">旅游奖</span></p>
+                <p class="text-center">兑奖码<span id="code">WTlkdaD</span></p>
+                <p class="text-center">关注公众号回复兑奖码即可获得奖品，快去关注吧</p>
+                <img src="{% static 'images/wechat.jpg' %}" class="img-responsive center-block">
+            </div>
+            <!--   <div class="modal-footer">
+                  <button type="button" id="to_info" class="btn btn-primary btn-lg btn-block ladda-button" data-dismiss="modal" data-style="zoom-out" data-size="l"><span class='ladda-label'>完善信息</span> </button>
+              </div> -->
         </div>
     </div>
+</div>
 
-	<h1 id="title">画符召唤奖品</h1>
-	<div id="finish"></div>
-	<div><canvas id="canvas"></canvas></div>
+<h1 id="title">画符召唤奖品</h1>
+<div>
+    <canvas id="canvas" usemap="#MM"></canvas>
+</div>
+<map id="finish" name="MM">
+    <area class="click" id="1" shape="rect" coords="43,223,86,249" href="#rect" title="矩形" alt="矩形">\
+</map>
 
 <script src="https://libs.cdnjs.net/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
 <script type="text/javascript">
     $("#rule").modal('show');
-	$("#finish").click(function() {
-		// $.ajax({
-		// 	url: '/identify/',
-		// 	type: "post",
-		// 	dataType: 'json',
-		// 	data: {
-		// 		'image': image.src,
-		// 		'csrfmiddlewaretoken': $("input[type='hidden']").val(),
-		// 	},
-		// 	success: function(res) {
-		// 		$("#number").text(res);
-		// 		identified = true;
-		// 	}
-		// })
-		$("#result").modal('show');
-	});
 
-	context = document.getElementById('canvas').getContext("2d");
-	var CanvasWidth =  window.screen.width;
-	var CanvasHeight = window.screen.availHeight - $("#title").height() - 40 - 10;
-	var identified = false;   // 识别标志
-	document.getElementById("canvas").width = CanvasWidth;
-	document.getElementById("canvas").height = CanvasHeight;
+    // 召唤
+    function adjustPosition(position) {
+        // 获取宽高
+        var pageWidth = $("#canvas").width();
+        var pageHeight = $("#canvas").height();
+        // 图片原始尺寸
+        var imageWidth = 132;
+        var imageHeigth = 266;
 
+        var each = position.split(",");
 
-	var clickX = new Array();
-	var clickY = new Array();
-	var clickDrag = new Array();
-	var paint;
-	 
-	function addClick(x, y, dragging)
-	{
-		clickX.push(x);
-		clickY.push(y);
-		clickDrag.push(dragging);
-	}
+        for (var i = 0; i < each.length; i++) {
+            if (i % 2 == 0) {
+                // 新的y轴坐标
+                each[i] = Math.round(parseInt(each[i]) * pageHeight / imageHeigth).toString();
+            } else {
+                // 新的x轴坐标
+                each[i] = Math.round(parseInt(each[i]) * pageWidth / imageWidth).toString();
+            }
+        }
+        var newPosition = "";
+        for (var j = 0; j < each.length; j++) {
+            newPosition += each[j];
+            if (j < each.length - 1) {
+                newPosition += ",";
+            }
+        }
+        return newPosition;
+    }
 
-	function redraw(){
-		canvas.width = canvas.width; // Clears the canvas
+    function adjust() {
+        var map = document.getElementById("MM");
+        var area = map.getElementsByTagName('area');
 
-		context.strokeStyle = "red";
-		context.lineJoin = "round";
-		context.lineWidth = 5;
+        for (var i = 0; i < area.length; i++) {
+            var oldCoords = area[i].getAttribute("coords");
+            var newcoords = adjustPosition(oldCoords);
+            area[i].setAttribute("coords", newcoords);
+        }
+    }
 
-		for(var i=0; i < clickX.length; i++) {
-			context.beginPath();
-			if(clickDrag[i] && i){//当是拖动而且i!=0时，从上一个点开始画线。
-				context.moveTo(clickX[i-1], clickY[i-1]);
-			}else{
-				context.moveTo(clickX[i]-1, clickY[i]);
-			}
-			context.lineTo(clickX[i], clickY[i]);
-			context.closePath();
-			context.stroke();
-		}
-	}
+    adjust();
 
+    $("#finish").click(function () {
+        // $.ajax({
+        // 	url: '/identify/',
+        // 	type: "post",
+        // 	dataType: 'json',
+        // 	data: {
+        // 		'image': image.src,
+        // 		'csrfmiddlewaretoken': $("input[type='hidden']").val(),
+        // 	},
+        // 	success: function(res) {
+        // 		$("#number").text(res);
+        // 		identified = true;
+        // 	}
+        // })
+        $("#result").modal('show');
+    });
 
-	$('#canvas').mousedown(function(e){
-		if (identified) {
-			context.clearRect(0, 0, CanvasWidth, CanvasHeight);
-			identified = false;
-			clickX = new Array();
-			clickY = new Array();
-			clickDrag = new Array();
-		}
-		var mouseX = e.pageX - this.offsetLeft;
-		var mouseY = e.pageY - this.offsetTop;
-
-		paint = true;
-		addClick(mouseX, mouseY);
-		redraw();
-		console.log('pc down')
-	});
-	$('#canvas').mousemove(function(e){
-		if(paint) {//是不是按下了鼠标
-			addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
-			redraw();
-		}
-		console.log('pc move')
-	});
-	$('#canvas').mouseup(function(e){
-		paint = false;
-	});
-	$('#canvas').mouseleave(function(e){
-		paint = false;
-	});
+    context = document.getElementById('canvas').getContext("2d");
+    var CanvasWidth = window.screen.width;
+    var CanvasHeight = window.screen.availHeight - $("#title").height() - 40 - 10;
+    var identified = false;   // 识别标志
+    document.getElementById("canvas").width = CanvasWidth;
+    document.getElementById("canvas").height = CanvasHeight;
 
 
-	$("#Identify").click(function() {
-		var image = new Image();
-		image.src = canvas.toDataURL("image/png");
+    var clickX = new Array();
+    var clickY = new Array();
+    var clickDrag = new Array();
+    var paint;
 
-		$.ajax({
-			url: '/identify/',
-			type: "post",
-			dataType: 'json',
-			data: {
-				'image': image.src,
-				'csrfmiddlewaretoken': $("input[type='hidden']").val(),
-			},
-			success: function(res) {
-				$("#number").text(res);
-				identified = true;
-			}
-		})
-	});
+    function addClick(x, y, dragging) {
+        clickX.push(x);
+        clickY.push(y);
+        clickDrag.push(dragging);
+    }
 
-	$("#clear").click(function() {
-		context.clearRect(0, 0, CanvasWidth, CanvasHeight);
-		identified = false;
-		clickX = new Array();
-		clickY = new Array();
-		clickDrag = new Array();
-	});
+    function redraw() {
+        canvas.width = canvas.width; // Clears the canvas
 
-	oCanvas = document.getElementById("canvas");
-	//手指触摸屏幕可记录此时的位置作为起点
-	oCanvas.addEventListener("touchstart",function(e){
-		event.preventDefault();
-		if (identified) {
-			context.clearRect(0, 0, CanvasWidth, CanvasHeight);
-			identified = false;
-			clickX = new Array();
-			clickY = new Array();
-			clickDrag = new Array();
-		}
-		var mouseX = event.changedTouches[0].clientX - e.target.offsetLeft;
-		var mouseY = event.changedTouches[0].clientY - e.target.offsetTop;
+        context.strokeStyle = "red";
+        context.lineJoin = "round";
+        context.lineWidth = 5;
 
-		paint = true;
-		addClick(mouseX, mouseY);
-		redraw();
-		console.log('ac down')
-	});
+        for (var i = 0; i < clickX.length; i++) {
+            context.beginPath();
+            if (clickDrag[i] && i) {//当是拖动而且i!=0时，从上一个点开始画线。
+                context.moveTo(clickX[i - 1], clickY[i - 1]);
+            } else {
+                context.moveTo(clickX[i] - 1, clickY[i]);
+            }
+            context.lineTo(clickX[i], clickY[i]);
+            context.closePath();
+            context.stroke();
+        }
+    }
 
-	//手指屏滑动画线
-	oCanvas.addEventListener("touchmove",function(e){
-		if(paint) {//是不是按下了鼠标
-			var mouseX = event.changedTouches[0].clientX - e.target.offsetLeft;
-			var mouseY = event.changedTouches[0].clientY - e.target.offsetTop;
-			addClick(mouseX, mouseY, true);
-			redraw();
-		}
-		console.log('ac move')
-	});
-	oCanvas.addEventListener("touchend", function() {
-		paint = false;
-	})
+
+    $('#canvas').mousedown(function (e) {
+        if (identified) {
+            context.clearRect(0, 0, CanvasWidth, CanvasHeight);
+            identified = false;
+            clickX = new Array();
+            clickY = new Array();
+            clickDrag = new Array();
+        }
+        var mouseX = e.pageX - this.offsetLeft;
+        var mouseY = e.pageY - this.offsetTop;
+
+        paint = true;
+        addClick(mouseX, mouseY);
+        redraw();
+        console.log('pc down')
+    });
+    $('#canvas').mousemove(function (e) {
+        if (paint) {//是不是按下了鼠标
+            addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
+            redraw();
+        }
+        console.log('pc move')
+    });
+    $('#canvas').mouseup(function (e) {
+        paint = false;
+    });
+    $('#canvas').mouseleave(function (e) {
+        paint = false;
+    });
+
+
+    $("#Identify").click(function () {
+        var image = new Image();
+        image.src = canvas.toDataURL("image/png");
+
+        $.ajax({
+            url: '/identify/',
+            type: "post",
+            dataType: 'json',
+            data: {
+                'image': image.src,
+                'csrfmiddlewaretoken': $("input[type='hidden']").val(),
+            },
+            success: function (res) {
+                $("#number").text(res);
+                identified = true;
+            }
+        })
+    });
+
+    $("#clear").click(function () {
+        context.clearRect(0, 0, CanvasWidth, CanvasHeight);
+        identified = false;
+        clickX = new Array();
+        clickY = new Array();
+        clickDrag = new Array();
+    });
+
+    oCanvas = document.getElementById("canvas");
+    //手指触摸屏幕可记录此时的位置作为起点
+    oCanvas.addEventListener("touchstart", function (e) {
+        event.preventDefault();
+        if (identified) {
+            context.clearRect(0, 0, CanvasWidth, CanvasHeight);
+            identified = false;
+            clickX = new Array();
+            clickY = new Array();
+            clickDrag = new Array();
+        }
+        var mouseX = event.changedTouches[0].clientX - e.target.offsetLeft;
+        var mouseY = event.changedTouches[0].clientY - e.target.offsetTop;
+
+        paint = true;
+        addClick(mouseX, mouseY);
+        redraw();
+        console.log('ac down')
+    });
+
+    //手指屏滑动画线
+    oCanvas.addEventListener("touchmove", function (e) {
+        if (paint) {//是不是按下了鼠标
+            var mouseX = event.changedTouches[0].clientX - e.target.offsetLeft;
+            var mouseY = event.changedTouches[0].clientY - e.target.offsetTop;
+            addClick(mouseX, mouseY, true);
+            redraw();
+        }
+        console.log('ac move')
+    });
+    oCanvas.addEventListener("touchend", function () {
+        paint = false;
+    })
 </script>
 </body>
 </html>
