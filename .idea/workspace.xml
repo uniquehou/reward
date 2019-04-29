@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7a04501d-6925-4a9e-9984-5556e2f8cf1e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/DrawAward.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/DrawAward.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -63,8 +64,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/click_map.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="196" column="13" lean-forward="true" selection-start-line="156" selection-start-column="4" selection-end-line="196" selection-end-column="13" />
+            <state relative-caret-position="807">
+              <caret line="187" column="49" selection-start-line="187" selection-start-column="45" selection-end-line="187" selection-end-column="49" />
             </state>
           </provider>
         </entry>
@@ -72,8 +73,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/DrawAward.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="370">
-              <caret line="101" lean-forward="true" selection-start-line="101" selection-end-line="101" />
+            <state relative-caret-position="230">
+              <caret line="32" column="9" lean-forward="true" selection-start-line="32" selection-start-column="9" selection-end-line="32" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -218,12 +219,12 @@
       <option name="presentableId" value="Default" />
       <updated>1556445531742</updated>
       <workItem from="1556445538563" duration="3076000" />
-      <workItem from="1556550935497" duration="3646000" />
+      <workItem from="1556550935497" duration="4360000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6722000" />
+    <option name="totallyTimeSpent" value="7436000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
@@ -327,15 +328,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/click_map.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="196" column="13" lean-forward="true" selection-start-line="156" selection-start-column="4" selection-end-line="196" selection-end-column="13" />
+        <state relative-caret-position="807">
+          <caret line="187" column="49" selection-start-line="187" selection-start-column="45" selection-end-line="187" selection-end-column="49" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/DrawAward.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="370">
-          <caret line="101" lean-forward="true" selection-start-line="101" selection-end-line="101" />
+        <state relative-caret-position="230">
+          <caret line="32" column="9" lean-forward="true" selection-start-line="32" selection-start-column="9" selection-end-line="32" selection-end-column="9" />
         </state>
       </provider>
     </entry>
