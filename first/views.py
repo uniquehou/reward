@@ -57,6 +57,12 @@ class search(View):
                 "name": "可乐一瓶",
                 "use": "未使用"
             }
+        elif code=="LT008":
+            result = {
+                "status": 2,
+                "name": "雪碧一瓶",
+                "use": "已使用"
+            }
         else:
             result = {
                 "status": 0
