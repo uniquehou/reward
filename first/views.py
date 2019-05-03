@@ -42,3 +42,23 @@ class clickMap(View):
 class drawAward(View):
     def get(self, request):
         return render(request, 'DrawAward.html')
+
+
+class search(View):
+    def get(self, request):
+        return render(request, 'search.html')
+
+    def post(self, request):
+        code = request.POST.get("code", "")
+        result = {}
+        if code=="LT007":
+            result = {
+                "status": 1,
+                "name": "可乐一瓶",
+                "use": "未使用"
+            }
+        else:
+            result = {
+                "status": 0
+            }
+        return HttpResponse(json.dumps(result, ensure_ascii=False), content_type="application/json")

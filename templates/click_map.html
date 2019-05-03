@@ -61,7 +61,7 @@
             </div>
             <div class="modal-body">
                 <p class="text-center">恭喜你，抽中<span id="award"></span></p>
-                <p class="text-center">兑奖码<span id="code">WTlkdaD</span></p>
+                <p class="text-center">兑奖码<span id="code">LT007</span></p>
                 <p class="text-center">关注公众号回复兑奖码即可获得奖品，快去关注吧</p>
                 <img src="{% static 'images/wechat.jpg' %}" class="img-responsive center-block">
             </div>
@@ -95,19 +95,14 @@
 {#    <p class="text-center">奖品可能藏在任何角落，点击即可抽奖</p>#}
 {#    <p class="text-center">不过您只有3次机会，祝您好运</p>#}
 
-<img id="image" class="img-responsive" src="{% static 'images/click.jpg' %}" alt="美女" usemap="#MM">
+<img id="image" class="img-responsive" src="{% static 'images/test.jpg' %}" alt="美女" usemap="#MM">
 <map id="MM" name="MM">
-    <area class="click" id="1" shape="rect" coords="376,935,396,959" href="#rect" title="矩形" alt="矩形">
-    <area class="click" id="2" shape="rect" coords="67,411,199,491" href="#rect" title="矩形" alt="矩形">
-    <area class="click" id="3" shape="rect" coords="295,258,342,318" href="#rect" title="矩形" alt="矩形">
-    <area class="click" id="4" shape="rect" coords="285,318,357,345" href="#rect" title="矩形" alt="矩形">
-    <area class="click" id="5" shape="rect" coords="256,220,306,255" href="#rect" title="矩形" alt="矩形">
-    <area class="click" id="6" shape="rect" coords="332,221,393,257" href="#rect" title="矩形" alt="矩形">
-    <area class="click" id="7" shape="rect" coords="466,507,645,666" href="#rect" title="矩形" alt="矩形">
-    <area class="click" id="8" shape="poly" coords="219,871,288,951,364,959,412,908,377,850,256,796" href="#rect"
-          title="矩形" alt="矩形">
-    <area class="click" id="9" shape="poly" coords="160,894,149,941,199,1009,278,943,215,873" href="#rect" title="矩形"
-          alt="矩形">
+    <area class="click" id="1" shape="rect" coords="592,384,618,378" href="#rect" title="矩形" alt="矩形">
+    <area class="click" id="2" shape="rect" coords="522,570,554,610" href="#rect" title="矩形" alt="矩形">
+    <area class="click" id="3" shape="rect" coords="847,1416,892,1464" href="#rect" title="矩形" alt="矩形">
+    <area class="click" id="4" shape="rect" coords="672,866,708,902" href="#rect" title="矩形" alt="矩形">
+    <area class="click" id="5" shape="rect" coords="168,1096,238,1154" href="#rect" title="矩形" alt="矩形">
+    <area class="click" id="6" shape="rect" coords="158,364,286,416" href="#rect" title="矩形" alt="矩形">
 </map>
 
 <script src="https://libs.cdnjs.net/jquery/3.3.1/jquery.min.js"></script>
@@ -115,8 +110,16 @@
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
 <script type="text/javascript">
+
     $("#rule").modal('show');
-    var awards = ["小米9手机一部", "西安3日游", "四级课程", "六级课程", "牛奶一箱", "免费早餐一次", "巴氏草莓酸奶一瓶", "笔记本一本", "黑色中性笔一支"];
+    var awards = [
+        ["雪碧一瓶", "可乐一瓶", "汉斯小木屋一个", "啤酒一罐"],
+        ["满50减10"],
+        ["酸奶一瓶", "小菜一碟", "花生一盘"],
+        ["小哥哥早起叫醒服务一次", "小姐姐早起叫醒服务一次"],
+        ["减肥队友一个", "图书馆占座一次", "快递代取一次"],
+        ["王者荣耀大神带飞一次", "吃鸡给力队友带飞一次"]
+    ];
     $(".click").click(function (e) {
         // $.ajax({
         // 	url: '/identify/',
@@ -132,8 +135,11 @@
         // 	}
         // })
         if (count > 0) {
-            console.log(e.target.id)
-            $("#award").text(awards[e.target.id - 1])
+            console.log(e.target.id);
+            arr = awards[parseInt(e.target.id) - 1];
+            console.log(arr);
+            value = arr[Math.round(Math.random()*(arr.length-1))];
+            $("#award").text(value);
             $("#result").modal('show');
             return false;
         } else {
@@ -151,7 +157,7 @@
             $("#error-text").text("抽奖次数已用完");
         }
         $("#error").modal('show')
-    })
+    });
 
 
     function adjustPosition(position) {
@@ -159,8 +165,8 @@
         var pageWidth = $("#image").width();
         var pageHeight = $("#image").height();
         // 图片原始尺寸
-        var imageWidth = 713;
-        var imageHeigth = 1071;
+        var imageWidth = document.getElementById("image").naturalWidth;
+        var imageHeigth = document.getElementById("image").naturalHeight;
 
         var each = position.split(",");
 
