@@ -68,3 +68,7 @@ class search(View):
                 "status": 0
             }
         return HttpResponse(json.dumps(result, ensure_ascii=False), content_type="application/json")
+
+
+def meng(request):
+    return render(request, 'meng.html')

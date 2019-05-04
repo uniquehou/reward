@@ -8,4 +8,6 @@ urlpatterns = [
     url(r'clickmap/', views.clickMap.as_view(), name='clickmap'),
     url(r'drawaward/', views.drawAward.as_view(), name='drawaard'),
     url(r'search/', views.search.as_view(), name='search'),
+
+    url(r'meng/', views.meng, name='meng')
 ]
