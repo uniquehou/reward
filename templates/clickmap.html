@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
+    <title>抽奖</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -50,6 +50,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="result" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -60,8 +61,8 @@
             </div>
             <div class="modal-body">
                 <p class="text-center">恭喜你，抽中<span id="award"></span></p>
-                <p class="text-center">兑奖码<span id="code">LT007</span></p>
-                <p class="text-center">关注公众号回复兑奖码即可获得奖品，快去关注吧</p>
+                <p class="text-center">兑奖码<span id="code"></span></p>
+                <p class="text-center">请扫码添加下面的QQ群兑奖奖品</p>
                 <img src="{% static 'images/group.jpg' %}" class="img-responsive center-block">
             </div>
             <!--   <div class="modal-footer">
@@ -90,20 +91,16 @@
     </div>
 </div>
 
+{#	<h1 class="text-center">找奖品</h1>#}
+{#    <p class="text-center">奖品可能藏在任何角落，点击即可抽奖</p>#}
+{#    <p class="text-center">不过您只有3次机会，祝您好运</p>#}
 
-<img id="image" class="img-responsive" src="{% static 'images/meng.jpg' %}" alt="美女" usemap="#MM">
+<img id="image" class="img-responsive" src={{ img.img.url }} alt="美女" usemap="#MM">
+{% csrf_token %}
 <map id="MM" name="MM">
-    <area class="click" id="1" shape="rect" coords="376,935,396,959" href="#rect" title="矩形" alt="矩形">
-    <area class="click" id="2" shape="rect" coords="67,411,199,491" href="#rect" title="矩形" alt="矩形">
-    <area class="click" id="3" shape="rect" coords="295,258,342,318" href="#rect" title="矩形" alt="矩形">
-    <area class="click" id="4" shape="rect" coords="285,318,357,345" href="#rect" title="矩形" alt="矩形">
-    <area class="click" id="5" shape="rect" coords="256,220,306,255" href="#rect" title="矩形" alt="矩形">
-    <area class="click" id="6" shape="rect" coords="332,221,393,257" href="#rect" title="矩形" alt="矩形">
-    <area class="click" id="7" shape="rect" coords="466,507,645,666" href="#rect" title="矩形" alt="矩形">
-    <area class="click" id="8" shape="poly" coords="219,871,288,951,364,959,412,908,377,850,256,796" href="#rect"
-          title="矩形" alt="矩形">
-    <area class="click" id="9" shape="poly" coords="160,894,149,941,199,1009,278,943,215,873" href="#rect" title="矩形"
-          alt="矩形">
+    {% for map in maps %}
+    <area class="click" id="{{ map.id }}" shape="rect" coords="{{ map.area }}" href="#rect" title="矩形" alt="矩形">
+    {% endfor %}
 </map>
 
 <script src="https://libs.cdnjs.net/jquery/3.3.1/jquery.min.js"></script>
@@ -111,27 +108,29 @@
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
 <script type="text/javascript">
-    $("#rule").modal('show');
 
-    var awards = ["小米9手机一部", "西安3日游", "四级课程", "六级课程", "牛奶一箱", "免费早餐一次", "巴氏草莓酸奶一瓶", "笔记本一本", "黑色中性笔一支"];
+    $("#rule").modal('show');
     $(".click").click(function (e) {
-        // $.ajax({
-        // 	url: '/identify/',
-        // 	type: "post",
-        // 	dataType: 'json',
-        // 	data: {
-        // 		'image': image.src,
-        // 		'csrfmiddlewaretoken': $("input[type='hidden']").val(),
-        // 	},
-        // 	success: function(res) {
-        // 		$("#number").text(res);
-        // 		identified = true;
-        // 	}
-        // })
-        console.log(e.target.id)
-        $("#award").text(awards[e.target.id - 1])
-        $("#result").modal('show');
-        return false;
+        if (count>0) {
+            id = e.target.id;
+            $.ajax('#', {
+                type: "POST",
+                dataType: 'json',
+                data: {
+                    'areaid': id,
+                    'csrfmiddlewaretoken': $("input[type='hidden']").val(),
+                },
+                success: function(res) {
+                    $("#award").text(res.award);
+                    $("#code").text(res.code);
+                    $("#result").modal('show');
+                }
+            });
+        } else {
+            $("#error-text").text("抽奖次数已用完");
+            $("#error").modal('show')
+        }
+
     });
 
     var count = 3;
@@ -139,11 +138,11 @@
         if (count > 0) {
             $("#count").text(count);
             count = count - 1;
-            $("#error").modal('show')
         } else {
-            $("#error-text").text("抽奖结束");
+            $("#error-text").text("抽奖次数已用完");
         }
-    })
+        $("#error").modal('show')
+    });
 
 
     function adjustPosition(position) {
@@ -151,8 +150,8 @@
         var pageWidth = $("#image").width();
         var pageHeight = $("#image").height();
         // 图片原始尺寸
-        var imageWidth = 713;
-        var imageHeigth = 1071;
+        var imageWidth = document.getElementById("image").naturalWidth;
+        var imageHeigth = document.getElementById("image").naturalHeight;
 
         var each = position.split(",");
 

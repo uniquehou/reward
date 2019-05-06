@@ -3,7 +3,9 @@ from django.http import HttpResponse
 from django.views.generic.base import View
 from django.views.decorators.csrf import csrf_exempt
 from first.models import *
+from random import choice, sample
 import json
+import string
 
 
 def trans_phone():
@@ -72,3 +74,40 @@ class search(View):
 
 def meng(request):
     return render(request, 'meng.html')
+
+
+class onClickMap(View):
+    def get(self, request):
+        id = request.GET.get("imgid", "")
+        img = ClickMap.objects.filter(id=int(id)).first()
+        maps = img.clickmaparea_set.all()
+        res = {
+            'img': img,
+            'maps': maps,
+        }
+        return render(request, 'clickmap.html', res)
+
+    def post(self, request):
+        id = request.POST.get("areaid", "")
+        awards = ClickMapAward.objects.filter(area_id=int(id))
+        award = choice(awards)
+        code = ClickMapAwardCode()
+        code.award = award
+        code.code = self.getCode()
+        code.use = '2'
+        code.save()
+        res = {
+            "award": award.name,
+            "code": code.code,
+        }
+        return HttpResponse(json.dumps(res), content_type="application/json")
+
+    def getCode(self):
+        pre = "LT"
+        code = ""
+        field = string.ascii_letters + string.digits
+        while True:
+            code = ''.join(sample(field, 6))
+            if not ClickMapAwardCode.objects.filter(code=pre+code).first():
+                break
+        return pre+code

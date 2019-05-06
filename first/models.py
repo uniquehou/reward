@@ -13,3 +13,58 @@ class Question(models.Model):
     class Meta:
         verbose_name = "答题抽奖"
         verbose_name_plural = '答题抽奖'
+
+
+class ClickMap(models.Model):
+    name = models.CharField(u'名称', max_length=100, default='', blank=True)
+    img = models.ImageField(u'抽奖图片', upload_to='clickmap')
+    url = models.CharField(u'抽奖链接', max_length=50, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "抽奖图片"
+        verbose_name_plural = '抽奖图片'
+
+class ClickMapArea(models.Model):
+    img = models.ForeignKey(ClickMap, verbose_name=u'图片', on_delete=models.CASCADE)
+    name = models.CharField(u'区域名', max_length=50)
+    area = models.CharField(u'抽奖区域', max_length=50)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "奖品区域"
+        verbose_name_plural = '奖品区域'
+
+
+class ClickMapAward(models.Model):
+    area = models.ForeignKey(ClickMapArea, verbose_name='绑定区域', on_delete=models.CASCADE)
+    name = models.CharField("奖品名", max_length=100)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "奖品"
+        verbose_name_plural = '奖品'
+
+
+class ClickMapAwardCode(models.Model):
+    useChoice = (
+        ('1', '已使用'),
+        ('2', '未使用')
+    )
+
+    award = models.ForeignKey(ClickMapAward, verbose_name="奖品", on_delete=models.CASCADE)
+    code = models.CharField("兑奖码", max_length=20)     # LTxxxxx
+    use = models.CharField("使用情况", max_length=2, choices=useChoice, default='2')
+
+    def __str__(self):
+        return self.code
+
+    class Meta:
+        verbose_name = "兑奖码"
+        verbose_name_plural = '兑奖码'
