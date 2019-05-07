@@ -8,7 +8,7 @@ class QuestionAdmin(object):
 
 
 class ClickMapAdmin(object):
-    list_display = ('id', 'name', )
+    list_display = ('name', 'id', 'url', 'note' )
 
 class ClickMapAreaAdmin(object):
     list_display = ('img', 'name', 'area')
@@ -20,7 +20,7 @@ class ClickMapAwareAdmin(object):
 
 class ClickMapAwareCodeAdmin(object):
     list_display = ('award', 'code', 'use')
-    list_filter = ('award')
+    list_filter = ('award', )
 
 # xadmin.site.register(Question, QuestionAdmin)
 xadmin.site.register(ClickMap, ClickMapAdmin)

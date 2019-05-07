@@ -52,24 +52,24 @@ class search(View):
 
     def post(self, request):
         code = request.POST.get("code", "")
+        awardCode = ClickMapAwardCode.objects.filter(code=code).first()
         result = {}
-        if code=="LT007":
-            result = {
-                "status": 1,
-                "name": "可乐一瓶",
-                "use": "未使用"
-            }
-        elif code=="LT008":
-            result = {
-                "status": 2,
-                "name": "雪碧一瓶",
-                "use": "已使用"
-            }
+        if awardCode:
+            result['status'] = int(awardCode.use)
+            result['codeid'] = awardCode.id
+            result['name'] = awardCode.award.name
+            result['use'] = awardCode.get_use_display()
         else:
-            result = {
-                "status": 0
-            }
+            result['status'] = 0
         return HttpResponse(json.dumps(result, ensure_ascii=False), content_type="application/json")
+
+
+def codeExchange(request):
+    codeId = request.POST.get("codeId", "")
+    code = ClickMapAwardCode.objects.get(id=int(codeId))
+    code.use = '2'
+    code.save()
+    return HttpResponse(json.dumps({"status": 1}), content_type="application/json")
 
 
 def meng(request):
@@ -94,7 +94,7 @@ class onClickMap(View):
         code = ClickMapAwardCode()
         code.award = award
         code.code = self.getCode()
-        code.use = '2'
+        code.use = '1'
         code.save()
         res = {
             "award": award.name,

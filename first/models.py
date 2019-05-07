@@ -17,8 +17,9 @@ class Question(models.Model):
 
 class ClickMap(models.Model):
     name = models.CharField(u'名称', max_length=100, default='', blank=True)
-    img = models.ImageField(u'抽奖图片', upload_to='clickmap')
+    img = models.FileField(u'抽奖图片', upload_to='clickmap', blank=True)
     url = models.CharField(u'抽奖链接', max_length=50, blank=True)
+    note = models.CharField(u'二次未中提示语', max_length=100, blank=True, default='')
 
     def __str__(self):
         return self.name
@@ -54,13 +55,13 @@ class ClickMapAward(models.Model):
 
 class ClickMapAwardCode(models.Model):
     useChoice = (
-        ('1', '已使用'),
-        ('2', '未使用')
+        ('1', '未使用'),
+        ('2', '已使用')
     )
 
     award = models.ForeignKey(ClickMapAward, verbose_name="奖品", on_delete=models.CASCADE)
     code = models.CharField("兑奖码", max_length=20)     # LTxxxxx
-    use = models.CharField("使用情况", max_length=2, choices=useChoice, default='2')
+    use = models.CharField("使用情况", max_length=2, choices=useChoice, default='1')
 
     def __str__(self):
         return self.code

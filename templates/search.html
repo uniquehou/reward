@@ -47,10 +47,13 @@
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
 <script type="text/javascript">
+    var codeId = ""
     $("#exchange").hide();
     $("#search").click(function () {
         if ($("#code").val()=="")
             return false;
+        $("#name").text("");
+        $("#use").text("");
         $.ajax('#', {
             type: "POST",
             dataType: "json",
@@ -64,6 +67,7 @@
                 } else {
                     $("#name").text(res.name);
                     $("#use").text(res.use);
+                    codeId=res.codeid;
                     if (res.status==2)
                         $("#exchange").hide();
                     else if (res.status ==1)
@@ -74,11 +78,22 @@
     });
 
     $("#exchange").click(function () {
-        alert("兑换成功");
-        $("#use").text("已使用")
-        $("#exchange").hide();
+        $.ajax("{% url 'first:codeExchange' %}", {
+            type: "POST",
+            dataType: "json",
+            data: {
+                "codeId": codeId,
+                'csrfmiddlewaretoken': $("input[type='hidden']").val(),
+            },
+            success: function (res) {
+                if (res.status == 1) {
+                    alert("兑换成功");
+                    $("#use").text("已使用")
+                    $("#exchange").hide();
+                }
+            }
+        });
     });
-
 </script>
 </body>
 </html>
