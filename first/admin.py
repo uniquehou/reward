@@ -15,7 +15,7 @@ class ClickMapAreaAdmin(object):
     list_filter = ('img', )
 
 class ClickMapAwareAdmin(object):
-    list_display = ('area', 'name')
+    list_display = ('area', 'name', 'rate')
     list_filter = ('area', )
 
 class ClickMapAwareCodeAdmin(object):

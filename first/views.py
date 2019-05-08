@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.views.generic.base import View
 from django.views.decorators.csrf import csrf_exempt
 from first.models import *
-from random import choice, sample
+from random import choice, sample, random
 import json
 import string
 
@@ -90,7 +90,7 @@ class onClickMap(View):
     def post(self, request):
         id = request.POST.get("areaid", "")
         awards = ClickMapAward.objects.filter(area_id=int(id))
-        award = choice(awards)
+        award = self.getAward(awards)
         code = ClickMapAwardCode()
         code.award = award
         code.code = self.getCode()
@@ -111,3 +111,12 @@ class onClickMap(View):
             if not ClickMapAwardCode.objects.filter(code=pre+code).first():
                 break
         return pre+code
+
+    def getAward(self, awards):
+        num = random()
+        sum = 0
+        for award in awards:
+            sum+=award.rate
+            if sum>=num:
+                break
+        return award

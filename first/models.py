@@ -44,6 +44,7 @@ class ClickMapArea(models.Model):
 class ClickMapAward(models.Model):
     area = models.ForeignKey(ClickMapArea, verbose_name='绑定区域', on_delete=models.CASCADE)
     name = models.CharField("奖品名", max_length=100)
+    rate = models.FloatField("奖品概率", default=0  )
 
     def __str__(self):
         return self.name

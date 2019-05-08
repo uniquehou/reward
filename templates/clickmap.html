@@ -38,13 +38,13 @@
                 </button>
                 <h4 class="modal-title" id="myModalLabel">找奖品</h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="begin">
                 <p class="text-center">动动你发财的小手</p>
                 <p class="text-center">点击图片任何位置即可参与一次抽奖</p>
                 <p class="text-center">您共有三次机会，祝君好运 ^_^</p>
             </div>
             <div class="modal-footer">
-                <button type="button" id="to_info" class="btn btn-primary btn-lg btn-block ladda-button"
+                <button type="button" id="finish" class="btn btn-primary btn-lg btn-block ladda-button"
                         data-dismiss="modal" data-style="zoom-out" data-size="l"><span class='ladda-label'>我准备好了</span>
                 </button>
             </div>
@@ -101,7 +101,7 @@
 {% csrf_token %}
 <map id="MM" name="MM">
     {% for map in maps %}
-    <area class="click" id="{{ map.id }}" shape="rect" coords="{{ map.area }}" href="#rect" title="矩形" alt="矩形">
+        <area class="click" id="{{ map.id }}" shape="rect" coords="{{ map.area }}" href="#rect" title="矩形" alt="矩形">
     {% endfor %}
 </map>
 
@@ -113,8 +113,9 @@
 
     $("#rule").modal('show');
     var count = 3;
+    var award = 0;
     $(".click").click(function (e) {
-        if (count>0) {
+        if (count > 0) {
             id = e.target.id;
             $.ajax('#', {
                 type: "POST",
@@ -123,10 +124,11 @@
                     'areaid': id,
                     'csrfmiddlewaretoken': $("input[type='hidden']").val(),
                 },
-                success: function(res) {
+                success: function (res) {
                     $("#award").text(res.award);
                     $("#code").text(res.code);
                     $("#result").modal('show');
+                    award = 1;
                 }
             });
         } else {
@@ -137,17 +139,34 @@
     });
 
     $("#image").click(function () {
-        if (count > 0) {
-            $("#count").text(count);
-            count = count - 1;
-            if (count==2)
-                $("#note").text("{{ img.note }}");
-        } else {
-            $("#error-text").text("三次都没中，你也是没谁了");
+        if (localStorage.finish == "1") {
+            $("#rule").modal('show');
+            return false;
         }
-        $("#error").modal('show')
+        if (award == 1) {
+            $("#result").modal('show');
+        } else {
+            count = count - 1;
+            if (count > 0) {
+                $("#count").text(count);
+                if (count == 1)
+                    $("#note").text("提示：{{ img.note }}");
+            } else {
+                $("#note").text("");
+                $("#error-text").text("三次都没中，你也是没谁了");
+            }
+            $("#error").modal('show')
+        }
     });
 
+    $("#finish").click(function () {
+        // localStorage.finish = 1;
+    });
+    if (localStorage.finish == "1") {
+        $("#begin").html('<p class="text-center">您已参与过抽奖</p>');
+        $("#finish").text("我知道了");
+        $("map").remove();
+    }
 
     function adjustPosition(position) {
         // 获取宽高
