@@ -3,13 +3,10 @@ from django.http import HttpResponse
 from django.views.generic.base import View
 from django.views.decorators.csrf import csrf_exempt
 from first.models import *
-from random import choice, sample, random
+from random import choice, sample, random, uniform
 import json
 import string
 
-
-def trans_phone():
-    pass
 
 class Questionnaire(View):
     @csrf_exempt
@@ -34,16 +31,6 @@ class Questionnaire(View):
         )
         res = json.dumps({"status": "1"})
         return HttpResponse(res, content_type="application/json")
-
-
-class clickMap(View):
-    def get(self, request):
-        return render(request, 'click_map.html')
-
-
-class drawAward(View):
-    def get(self, request):
-        return render(request, 'DrawAward.html')
 
 
 class search(View):
@@ -72,10 +59,6 @@ def codeExchange(request):
     return HttpResponse(json.dumps({"status": 1}), content_type="application/json")
 
 
-def meng(request):
-    return render(request, 'meng.html')
-
-
 class onClickMap(View):
     def get(self, request):
         id = request.GET.get("imgid", "")
@@ -89,17 +72,23 @@ class onClickMap(View):
 
     def post(self, request):
         id = request.POST.get("areaid", "")
-        awards = ClickMapAward.objects.filter(area_id=int(id))
-        award = self.getAward(awards)
-        code = ClickMapAwardCode()
-        code.award = award
-        code.code = self.getCode()
-        code.use = '1'
-        code.save()
-        res = {
-            "award": award.name,
-            "code": code.code,
-        }
+        awards = ClickMapAreaAward.objects.filter(area_id=int(id))
+        award = self.random_pick(awards)
+        if award:
+            code = ClickMapAwardCode()
+            code.award = award
+            code.code = self.getCode()
+            code.use = '1'
+            code.save()
+            res = {
+                "status": 1,
+                "award": award.name,
+                "code": code.code,
+            }
+        else:
+            res = {
+                "status": 0
+            }
         return HttpResponse(json.dumps(res), content_type="application/json")
 
     def getCode(self):
@@ -114,9 +103,17 @@ class onClickMap(View):
 
     def getAward(self, awards):
         num = random()
-        sum = 0
         for award in awards:
-            sum+=award.rate
-            if sum>=num:
-                break
-        return award
+           if num<=award.rate and award.award.count>0:
+                return award.award
+        return None
+
+    def random_pick(self, awards):
+        x = random()
+        print(x)
+        cumulative_probability = 0.0
+        for item, item_probability in zip([award.award for award in awards], [award.rate for award in awards]):
+            cumulative_probability += item_probability
+            if x <= cumulative_probability:
+                return item
+        return None

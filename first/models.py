@@ -42,16 +42,29 @@ class ClickMapArea(models.Model):
 
 
 class ClickMapAward(models.Model):
-    area = models.ForeignKey(ClickMapArea, verbose_name='绑定区域', on_delete=models.CASCADE)
     name = models.CharField("奖品名", max_length=100)
-    rate = models.FloatField("奖品概率", default=0  )
+    note = models.CharField("备注", max_length=100, blank=True, default="")
+    count = models.IntegerField("数量", default=0)
 
     def __str__(self):
-        return self.name
+        return "{}({})".format(self.name, self.note)
 
     class Meta:
-        verbose_name = "奖品"
-        verbose_name_plural = '奖品'
+        verbose_name = "抽奖奖品"
+        verbose_name_plural = '抽奖奖品'
+
+
+class ClickMapAreaAward(models.Model):
+    area = models.ForeignKey(ClickMapArea, verbose_name='绑定区域', on_delete=models.CASCADE)
+    award = models.ForeignKey(ClickMapAward, verbose_name='绑定奖品', on_delete=models.SET_NULL, null=True)
+    rate = models.FloatField("奖品概率", default=0)
+
+    def __str__(self):
+        return "{}-{}".format(self.area.name, self.award.name)
+
+    class Meta:
+        verbose_name = "奖品指定"
+        verbose_name_plural = '奖品指定'
 
 
 class ClickMapAwardCode(models.Model):

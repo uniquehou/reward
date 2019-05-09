@@ -125,10 +125,13 @@
                     'csrfmiddlewaretoken': $("input[type='hidden']").val(),
                 },
                 success: function (res) {
-                    $("#award").text(res.award);
-                    $("#code").text(res.code);
-                    $("#result").modal('show');
-                    award = 1;
+                    if (res.status == 1) {
+                        $("#award").text(res.award);
+                        $("#code").text(res.code);
+                        $("#result").modal('show');
+                        award = 1;
+                        $("map").remove();
+                    }
                 }
             });
         } else {

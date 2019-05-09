@@ -15,7 +15,10 @@ class ClickMapAreaAdmin(object):
     list_filter = ('img', )
 
 class ClickMapAwareAdmin(object):
-    list_display = ('area', 'name', 'rate')
+    list_display = ('name', 'note', 'count')
+
+class ClickMapAreaAwareAdmin(object):
+    list_display = ('area', 'award', 'rate')
     list_filter = ('area', )
 
 class ClickMapAwareCodeAdmin(object):
@@ -26,4 +29,5 @@ class ClickMapAwareCodeAdmin(object):
 xadmin.site.register(ClickMap, ClickMapAdmin)
 xadmin.site.register(ClickMapArea, ClickMapAreaAdmin)
 xadmin.site.register(ClickMapAward, ClickMapAwareAdmin)
+xadmin.site.register(ClickMapAreaAward, ClickMapAreaAwareAdmin)
 xadmin.site.register(ClickMapAwardCode, ClickMapAwareCodeAdmin)
