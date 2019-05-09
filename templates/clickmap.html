@@ -112,64 +112,81 @@
 <script type="text/javascript">
 
     $("#rule").modal('show');
-    var count = 3;
-    var award = 0;
-    $(".click").click(function (e) {
-        if (count > 0) {
-            id = e.target.id;
-            $.ajax('#', {
-                type: "POST",
-                dataType: 'json',
-                data: {
-                    'areaid': id,
-                    'csrfmiddlewaretoken': $("input[type='hidden']").val(),
-                },
-                success: function (res) {
-                    if (res.status == 1) {
-                        $("#award").text(res.award);
-                        $("#code").text(res.code);
-                        $("#result").modal('show');
-                        award = 1;
-                        $("map").remove();
-                    }
-                }
-            });
-        } else {
-            $("#error-text").text("三次都没中，你也是没谁了");
-            $("#error").modal('show')
-        }
 
-    });
-
-    $("#image").click(function () {
-        if (localStorage.finish == "1") {
-            $("#rule").modal('show');
-            return false;
-        }
-        if (award == 1) {
-            $("#result").modal('show');
-        } else {
-            count = count - 1;
-            if (count > 0) {
-                $("#count").text(count);
-                if (count == 1)
-                    $("#note").text("提示：{{ img.note }}");
-            } else {
-                $("#note").text("");
-                $("#error-text").text("三次都没中，你也是没谁了");
-            }
-            $("#error").modal('show')
-        }
-    });
-
-    $("#finish").click(function () {
-        // localStorage.finish = 1;
-    });
-    if (localStorage.finish == "1") {
-        $("#begin").html('<p class="text-center">您已参与过抽奖</p>');
+    {% ifequal lock 1 %}
+        $("#begin").html('<p class="text-center">您已参与过抽奖，再次抽奖需解锁</p>');
         $("#finish").text("我知道了");
         $("map").remove();
-    }
+        $("#image").click(function () {
+            if (localStorage.finish == "1") {
+                $("#rule").modal('show');
+                return false;
+            }
+        });
+    {% else %}
+        var count = 3;
+        var award = 0;
+        $(".click").click(function (e) {
+            if (award == 1) {
+                $("#result").modal('show');
+                return false;
+            }
+            if (count > 0) {
+                id = e.target.id;
+                $.ajax('#', {
+                    type: "POST",
+                    dataType: 'json',
+                    data: {
+                        'areaid': id,
+                        'csrfmiddlewaretoken': $("input[type='hidden']").val(),
+                    },
+                    success: function (res) {
+                        if (res.status == 1) {
+                            $("#award").text(res.award);
+                            $("#code").text(res.code);
+                            $("#result").modal('show');
+                            award = 1;
+                        }
+                    }
+                });
+            } else {
+                $("#error-text").text("三次都没中，你也是没谁了");
+                $("#error").modal('show')
+            }
+        });
+        $("#image").click(function () {
+            if (award == 1) {
+                $("#result").modal('show');
+            } else {
+                count = count - 1;
+                if (count > 0) {
+                    $("#count").text(count);
+                    if (count == 1)
+                        $("#note").text("提示：{{ img.note }}");
+                } else {
+                    $("#note").text("");
+                    $("#error-text").text("三次都没中，你也是没谁了");
+                }
+                $("#error").modal('show')
+            }
+        });
+
+    {% endifequal %}
+
+    $("#finish").click(function () {
+        $.ajax("{% url 'first:lock' %}", {
+            type: "POST",
+            dataType: "json",
+            data: {
+                'csrfmiddlewaretoken': $("input[type='hidden']").val(),
+            },
+            success: function (res) {
+                if (res.status == 1)
+                    $("#rule").modal('hide');
+            }
+        });
+        return false;
+    });
 
     function adjustPosition(position) {
         // 获取宽高

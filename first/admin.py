@@ -25,9 +25,13 @@ class ClickMapAwareCodeAdmin(object):
     list_display = ('award', 'code', 'use')
     list_filter = ('award', )
 
+class LockCodeAdmin(object):
+    list_display = ('code', )
+
 # xadmin.site.register(Question, QuestionAdmin)
 xadmin.site.register(ClickMap, ClickMapAdmin)
 xadmin.site.register(ClickMapArea, ClickMapAreaAdmin)
 xadmin.site.register(ClickMapAward, ClickMapAwareAdmin)
 xadmin.site.register(ClickMapAreaAward, ClickMapAreaAwareAdmin)
 xadmin.site.register(ClickMapAwardCode, ClickMapAwareCodeAdmin)
+xadmin.site.register(LockCode, LockCodeAdmin)

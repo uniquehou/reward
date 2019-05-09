@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>解锁</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+</head>
+<body>
+    {% ifequal status 1 %}
+        <p>解锁成功，你可以继续抽奖</p>
+    {% else %}
+        <p>解锁失败，请联系客服获得有效的解锁链接</p>
+    {% endifequal %}
+
+    <p></p>
+</body>
+</html>

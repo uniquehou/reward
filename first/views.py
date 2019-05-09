@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, reverse
 from django.http import HttpResponse
 from django.views.generic.base import View
 from django.views.decorators.csrf import csrf_exempt
@@ -6,6 +6,7 @@ from first.models import *
 from random import choice, sample, random, uniform
 import json
 import string
+import hashlib
 
 
 class Questionnaire(View):
@@ -67,6 +68,7 @@ class onClickMap(View):
         res = {
             'img': img,
             'maps': maps,
+            "lock": request.session.get("lock")
         }
         return render(request, 'clickmap.html', res)
 
@@ -110,10 +112,50 @@ class onClickMap(View):
 
     def random_pick(self, awards):
         x = random()
-        print(x)
         cumulative_probability = 0.0
         for item, item_probability in zip([award.award for award in awards], [award.rate for award in awards]):
             cumulative_probability += item_probability
             if x <= cumulative_probability:
                 return item
         return None
+
+
+class getLock(View):
+    def get(self, request):
+        return render(request, 'getlock.html')
+
+    def post(self, request):
+        code = self.getCode()
+        code = LockCode(code=code)
+        code.save()
+        res = {
+            "status": 1,
+            "url": "http://{domain}{url}?code={code}".format(domain="localhost", url=reverse("first:unlock"), code=code.code)
+        }
+        return HttpResponse(json.dumps(res), content_type="application/json")
+
+    def getCode(self):
+        code = ""
+        field = string.ascii_letters + string.digits
+        while True:
+            m = hashlib.md5()
+            code = ''.join(sample(field, 6))
+            m.update(code.encode())
+            if not LockCode.objects.filter(code=m.hexdigest()).first():
+                break
+        return m.hexdigest()
+
+def lock(request):
+    request.session['lock'] = 1
+    return HttpResponse(json.dumps({"status": 1}), content_type="application/json")
+
+def unlock(request):
+    code = request.GET.get("code", "")
+    code = LockCode.objects.filter(code=code).first()
+    if code:
+        request.session['lock'] = 0
+        code.delete()
+        res ={"status": 1}
+    else:
+        res = {"status": 0}
+    return render(request, 'unlock.html', res)

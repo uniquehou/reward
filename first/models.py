@@ -83,3 +83,14 @@ class ClickMapAwardCode(models.Model):
     class Meta:
         verbose_name = "兑奖码"
         verbose_name_plural = '兑奖码'
+
+
+class LockCode(models.Model):
+    code = models.CharField("解锁码", max_length=50, default="")
+
+    def __str__(self):
+        return self.code
+
+    class Meta:
+        verbose_name = "解锁码"
+        verbose_name_plural = '解锁码'

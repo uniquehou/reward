@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>解锁链接</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style>
+        body {
+            background: #f0f1f2;
+        }
+
+        #search {
+            margin-top: 10px;
+        }
+
+        #search input {
+            height: 34px;
+        }
+
+        #result {
+            margin-top: 30px;
+        }
+
+        #result span {
+            margin-left: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<h1 class="text-center">解锁链接</h1>
+<div id="search" class="row">
+    {% csrf_token %}
+    <button class="btn btn-primary col-xs-8 col-xs-offset-2" id="getcode">获取解锁链接</button>
+</div>
+
+
+<script src="https://libs.cdnjs.net/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $("#getcode").click(function () {
+        $.ajax("#", {
+            type: "POST",
+            dataType: "json",
+            data: {
+                'csrfmiddlewaretoken': $("input[type='hidden']").val(),
+            },
+            success: function (res) {
+                if (res.status == 1) {
+                    var Url2 = res.url;
+                    var oInput = document.createElement('input');
+                    oInput.value = Url2;
+                    document.body.appendChild(oInput);
+                    oInput.select(); // 选择对象
+                    document.execCommand("Copy"); // 执行浏览器复制命令
+                    oInput.className = 'oInput';
+                    oInput.style.display = 'none';
+                    alert('获取成功,已复制至粘贴板');
+                }
+            }
+        })
+    });
+</script>
+</body>
+</html>

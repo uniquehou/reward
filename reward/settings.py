@@ -25,7 +25,7 @@ SECRET_KEY = 'syyfi8$_+82&px5gik2xhhm9m6^y5o!&n)p&&l_zviiy0+d^a1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['txj.unihyj.cn', 'localhost']
+ALLOWED_HOSTS = ['txj.unihyj.cn', 'localhost', 'kin.unihyj.cn']
 
 
 # Application definition
