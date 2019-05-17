@@ -21,4 +21,5 @@ import xadmin
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
     url(r'first/', include('first.urls')),
+    url(r'express/', include('express.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

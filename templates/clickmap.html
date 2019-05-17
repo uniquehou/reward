@@ -41,7 +41,7 @@
             <div class="modal-body" id="begin">
                 <p class="text-center">动动你发财的小手</p>
                 <p class="text-center">点击图片任何位置即可参与一次抽奖</p>
-                <p class="text-center">您共有三次机会，祝君好运 ^_^</p>
+                <p class="text-center">您共有两次机会，祝君好运 ^_^</p>
             </div>
             <div class="modal-footer">
                 <button type="button" id="finish" class="btn btn-primary btn-lg btn-block ladda-button"
@@ -63,7 +63,7 @@
             <div class="modal-body">
                 <p class="text-center">恭喜你，抽中<span id="award"></span></p>
                 <p class="text-center">兑奖码<span id="code"></span></p>
-                <p class="text-center">请扫码添加下面的QQ群兑奖奖品</p>
+                <p class="text-center">请截屏保存后添加客服兑奖</p>
                 <img src="{% static 'images/group.jpg' %}" class="img-responsive center-block">
             </div>
             <!--   <div class="modal-footer">
@@ -114,7 +114,7 @@
     $("#rule").modal('show');
 
     {% ifequal lock 1 %}
-        $("#begin").html('<p class="text-center">您已参与过抽奖，再次抽奖需解锁</p>');
+        $("#begin").html('<p class="text-center">您已参与过抽奖，再次抽奖请添加客服获取抽奖资格</p>');
         $("#finish").text("我知道了");
         $("map").remove();
         $("#image").click(function () {
@@ -124,7 +124,7 @@
             }
         });
     {% else %}
-        var count = 3;
+        var count = 2;
         var award = 0;
         $(".click").click(function (e) {
             if (award == 1) {
@@ -150,7 +150,7 @@
                     }
                 });
             } else {
-                $("#error-text").text("三次都没中，你也是没谁了");
+                $("#error-text").text("两次都没中，你也是没谁了");
                 $("#error").modal('show')
             }
         });
@@ -165,7 +165,7 @@
                         $("#note").text("提示：{{ img.note }}");
                 } else {
                     $("#note").text("");
-                    $("#error-text").text("三次都没中，你也是没谁了");
+                    $("#error-text").text("两次都没中，你也是没谁了");
                 }
                 $("#error").modal('show')
             }

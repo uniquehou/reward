@@ -11,21 +11,9 @@
             background: #f0f1f2;
         }
 
-        #search {
-            margin-top: 10px;
-        }
-
-        #search input {
-            height: 34px;
-        }
-
-        #result {
-            margin-top: 30px;
-        }
-
-        #result span {
-            margin-left: 10px;
-            font-weight: bold;
+        textarea {
+            width: 80%;
+            margin: 10px 10%;
         }
     </style>
 </head>
@@ -34,11 +22,24 @@
 <div id="search" class="row">
     {% csrf_token %}
     <button class="btn btn-primary col-xs-8 col-xs-offset-2" id="getcode">获取解锁链接</button>
+
 </div>
 
 
 <script src="https://libs.cdnjs.net/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
+    function copy(url) {
+        var Url2 = url;
+        var oInput = document.createElement('textarea');
+        oInput.value = Url2;
+        document.body.appendChild(oInput);
+        oInput.select(); // 选择对象
+        document.execCommand("Copy"); // 执行浏览器复制命令
+        oInput.className = 'oInput';
+        {#oInput.style.display = 'none';#}
+        alert('获取成功,已复制至粘贴板');
+    }
+
     $("#getcode").click(function () {
         $.ajax("#", {
             type: "POST",
@@ -48,15 +49,7 @@
             },
             success: function (res) {
                 if (res.status == 1) {
-                    var Url2 = res.url;
-                    var oInput = document.createElement('input');
-                    oInput.value = Url2;
-                    document.body.appendChild(oInput);
-                    oInput.select(); // 选择对象
-                    document.execCommand("Copy"); // 执行浏览器复制命令
-                    oInput.className = 'oInput';
-                    oInput.style.display = 'none';
-                    alert('获取成功,已复制至粘贴板');
+                    copy(res.url);
                 }
             }
         })

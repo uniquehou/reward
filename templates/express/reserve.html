@@ -1,0 +1,110 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>寄件预定</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style>
+        body {
+            background: #f0f1f2;
+        }
+    </style>
+</head>
+<body>
+
+<div class="modal fade" id="success" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">预定成功</h4>
+            </div>
+            <div class="modal-body" id="begin">
+                <p class="text-center">可扫码添加客服</p>
+                <img src="{% static 'images/group.jpg' %}" class="img-responsive center-block">
+                <p class="text-center">现在预定赠送一次抽奖机会，快去抽奖吧</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="finish" class="btn btn-primary btn-lg btn-block ladda-button"
+                        data-dismiss="modal" data-style="zoom-out" data-size="l"><span class='ladda-label'>去抽奖</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h1 class="text-center">寄件预定</h1>
+<div id="" class="container">
+    {% csrf_token %}
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">班级</label>
+            <div class="col-sm-10">
+                <select class="form-control" id="grade">
+                    {% for grade in grades %}
+                        <option value="{{ grade.id }}">{{ grade.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">姓名</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="name" placeholder="姓名">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">宿舍号</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="address" placeholder="21#333">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">联系电话</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="phone" placeholder="联系电话">
+            </div>
+        </div>
+    </form>
+    <div class="form-group">
+        <button type="submit" id="reserve" class="btn btn-primary col-xs-offset-2 col-xs-8">预定</button>
+    </div>
+</div>
+
+
+<script src="https://libs.cdnjs.net/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+<script type="text/javascript">
+    $("#reserve").click(function () {
+        $.ajax("{% url 'express:reserve' %}", {
+            type: "POST",
+            dataType: "json",
+            data: {
+                grade: $("#grade").val(),
+                name: $("#name").val(),
+                address: $("#address").val(),
+                phone: $("#phone").val(),
+                csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
+            },
+            success: function (res) {
+                if (res.status == 1) {
+                    $("#success").modal('show');
+                } else {
+                    alert("请补全信息");
+                }
+            }
+        });
+    });
+
+    $("#finish").click(function () {
+        location.href = "{% url 'first:clickmap' %}?imgid=6";
+    });
+</script>
+</body>
+</html>
