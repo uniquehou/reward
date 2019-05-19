@@ -26,11 +26,11 @@
             <div class="modal-body" id="begin">
                 <p class="text-center">可扫码添加客服</p>
                 <img src="{% static 'images/group.jpg' %}" class="img-responsive center-block">
-                <p class="text-center">现在预定赠送一次抽奖机会，快去抽奖吧</p>
+{#                <p class="text-center">现在预定赠送一次抽奖机会，快去抽奖吧</p>#}
             </div>
             <div class="modal-footer">
                 <button type="button" id="finish" class="btn btn-primary btn-lg btn-block ladda-button"
-                        data-dismiss="modal" data-style="zoom-out" data-size="l"><span class='ladda-label'>去抽奖</span>
+                        data-dismiss="modal" data-style="zoom-out" data-size="l"><span class='ladda-label'>知道了</span>
                 </button>
             </div>
         </div>
@@ -69,6 +69,12 @@
                 <input type="text" class="form-control" id="phone" placeholder="联系电话">
             </div>
         </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">寄件日期</label>
+            <div class="col-sm-10">
+                <input type="date" class="form-control" id="date" required="required">
+            </div>
+        </div>
     </form>
     <div class="form-group">
         <button type="submit" id="reserve" class="btn btn-primary col-xs-offset-2 col-xs-8">预定</button>
@@ -82,6 +88,10 @@
         crossorigin="anonymous"></script>
 <script type="text/javascript">
     $("#reserve").click(function () {
+        if ( $("#grade").val()=="" || $("#name").val()=="" || $("#address").val()=="" || $("#phone").val()=="" || $("#date").val()=="" ) {
+            alert("请补全信息");
+            return false;
+        }
         $.ajax("{% url 'express:reserve' %}", {
             type: "POST",
             dataType: "json",
@@ -90,6 +100,7 @@
                 name: $("#name").val(),
                 address: $("#address").val(),
                 phone: $("#phone").val(),
+                date: $("#date").val(),
                 csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
             },
             success: function (res) {
@@ -103,7 +114,7 @@
     });
 
     $("#finish").click(function () {
-        location.href = "{% url 'first:clickmap' %}?imgid=6";
+        {#location.href = "{% url 'first:clickmap' %}?imgid=6";#}
     });
 </script>
 </body>
