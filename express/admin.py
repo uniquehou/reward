@@ -24,8 +24,8 @@ class StuDepart(admin.SimpleListFilter):
 
 
 class StudentAdmin(object):
-    list_display = ('grade', 'name', 'address', 'phone', 'date')
-    list_filter = ('grade', 'date')
+    list_display = ('name', 'dormitory', 'phone', 'date', 'ctime')
+    list_filter = ('dormitory', 'date', 'ctime')
 
 class GradeAdmin(object):
     list_display = ('name', 'department')
@@ -36,7 +36,12 @@ class DepartmentAdmin(object):
     list_display = ('name', )
     ordering = ('id', )
 
+class DormitoryAdmin(object):
+    list_display = ('name', )
+    ordering = ('id', )
+
 
 xadmin.site.register(Student, StudentAdmin)
-xadmin.site.register(Grade, GradeAdmin)
-xadmin.site.register(Department, DepartmentAdmin)
+xadmin.site.register(Dormitory, DormitoryAdmin)
+# xadmin.site.register(Grade, GradeAdmin)
+# xadmin.site.register(Department, DepartmentAdmin)

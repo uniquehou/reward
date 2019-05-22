@@ -24,12 +24,30 @@ class Grade(models.Model):
         verbose_name_plural = '班级'
 
 
+class Dormitory(models.Model):
+    name = models.CharField("宿舍号", max_length=10)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = '宿舍'
+        verbose_name_plural = '宿舍'
+
+
 class Student(models.Model):
+    ctimeChoice = (
+        ('0', '全天'),
+        ('1', '上午'),
+        ('2', '下午')
+    )
     grade = models.ForeignKey(Grade, on_delete=models.SET_NULL, verbose_name='班级', default=0, null=True)
     name = models.CharField(u'姓名', max_length=30, default=' ')
-    address = models.CharField(u'宿舍号', max_length=20)
+    dormitory = models.ForeignKey(Dormitory, verbose_name='宿舍号', on_delete=models.SET_NULL, default=0, null=True)
+    address = models.CharField(u'地址', max_length=20)
     phone = models.CharField(u'联系方式', max_length=10)
     date = models.DateField(u'预定日期', default=timezone.now())
+    ctime = models.CharField(u'时间', max_length=3, choices=ctimeChoice, default='1')
 
     def __str__(self):
         return self.name

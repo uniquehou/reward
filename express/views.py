@@ -7,19 +7,18 @@ import datetime
 
 class Reserve(View):
     def get(self, request):
-        grades = Grade.objects.all()
-        return render(request, 'express/reserve.html', {"grades": grades})
+        dors = Dormitory.objects.all()
+        return render(request, 'express/reserve.html', {"dors": dors})
 
     def post(self, request):
-        grade = request.POST.get("grade", "")
+        dormitory = request.POST.get("dormitory", "")
         name = request.POST.get("name", "")
-        address = request.POST.get("address", "")
+        ctime = request.POST.get("ctime", "")
         phone = request.POST.get("phone", "")
         date = request.POST.get("date", "")
-        if grade and name and address and phone:
+        if dormitory and name and ctime and phone:
             date = list(map(int, date.split('-')))
-            Student.objects.create(grade_id=int(grade), name=name, address=address, phone=phone, date=datetime.date(*date))
-
+            Student.objects.create(dormitory_id=int(dormitory), name=name, ctime=ctime, phone=phone, date=datetime.date(*date))
             return HttpResponse(json.dumps({"status": 1}), content_type="application/json")
         else:
             return HttpResponse(json.dumps({"status": 2}), content_type="application/json")
