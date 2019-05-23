@@ -37,7 +37,6 @@ class Dormitory(models.Model):
 
 class Student(models.Model):
     ctimeChoice = (
-        ('0', '全天'),
         ('1', '上午'),
         ('2', '下午')
     )
